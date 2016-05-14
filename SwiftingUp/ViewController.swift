@@ -44,8 +44,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.startUpdatingLocation()
-//            locationManager.startMonitoringSignificantLocationChanges()
+//            locationManager.startUpdatingLocation()
+            locationManager.startMonitoringSignificantLocationChanges()
         }
     }
     
@@ -66,7 +66,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     }
     
     func didCaptureLongPress(gesture: UIGestureRecognizer) {
-        print(gesture.locationInView(mapView))
         let point = gesture.locationInView(mapView)
         let coordinate = mapView.convertPoint(point, toCoordinateFromView: mapView)
         addAnnotationToCoordinate(coordinate)
@@ -76,9 +75,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         annotation.title = "Annotation \(annotations.count + 1)"
+        annotation.subtitle = "Só mais uma anotação legal! 🤓"
         mapView.addAnnotation(annotation)
     }
     
+    var selectedAnnotation: MKAnnotation?
+    
+    @IBAction func removeSelectedAnnotation(sender: UIBarButtonItem) {
+        removeAnnotations()
+    }
+    
+    func removeAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
+    }
 
 }
 
