@@ -28,9 +28,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     }
     
     func configureMapView() {
-        centerMapOnLocation(initialLocation)
+        centerMapOnLocation(location: initialLocation)
         mapView.showsUserLocation = true
-        addLongPressGestureToView(mapView, withSelector: #selector(ViewController.didCaptureLongPress(_:)))
+        addLongPressGestureToView(view: mapView, withSelector: #selector(ViewController.didCaptureLongPress))
     }
     
     func centerMapOnLocation(location: CLLocation) {
@@ -51,7 +51,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     
     // MARK: - LocationManager delegate
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = manager.location else { return }
         let region = MKCoordinateRegionMakeWithDistance(location.coordinate, regionRadius * 2.0, regionRadius * 2.0)
         mapView.setRegion(region, animated: true)
@@ -66,9 +66,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDele
     }
     
     func didCaptureLongPress(gesture: UIGestureRecognizer) {
-        let point = gesture.locationInView(mapView)
-        let coordinate = mapView.convertPoint(point, toCoordinateFromView: mapView)
-        addAnnotationToCoordinate(coordinate)
+        let point = gesture.location(in: mapView)
+        let coordinate = mapView.convert(point, toCoordinateFrom: mapView)
+        addAnnotationToCoordinate(coordinate: coordinate)
     }
     
     func addAnnotationToCoordinate(coordinate: CLLocationCoordinate2D) {
